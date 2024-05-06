@@ -1,11 +1,12 @@
-import api from "../../api";
-import GetAllSprint from "./get-all-sprint.interface";
+import api from '../../api';
+import GetAllSprint from './get-all-sprint.interface';
 
-async function getAllSprint() {
+async function getAllSprint(
+  boardId: number,
+): Promise<GetAllSprint | undefined> {
   try {
     const response = await api.get<GetAllSprint>(
-      // "/rest/agile/1.0/board/3/sprint",
-      "/rest/agile/1.0/board/3/sprint",
+      `/rest/agile/1.0/board/${boardId}/sprint`,
     );
 
     return response.data;
@@ -14,4 +15,4 @@ async function getAllSprint() {
   }
 }
 
-export default getAllSprint
+export default getAllSprint;

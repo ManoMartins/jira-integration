@@ -1,11 +1,3 @@
-interface GetAllSprint {
-  maxResults: number;
-  startAt: number;
-  total: number;
-  isLast: boolean;
-  values: Value[];
-}
-
 interface Value {
   id: number;
   self: string;
@@ -17,6 +9,14 @@ interface Value {
   createdDate: string;
   originBoardId: number;
   goal?: string;
+}
+
+interface GetAllSprint {
+  maxResults: number;
+  startAt: number;
+  total: number;
+  isLast: boolean;
+  values: Value[];
 }
 
 export default GetAllSprint;

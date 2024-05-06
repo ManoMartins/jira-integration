@@ -1,68 +1,3 @@
-interface GetBoardIssuesForSprint {
-  expand: string;
-  startAt: number;
-  maxResults: number;
-  total: number;
-  issues: Issue[];
-  names: Names;
-}
-
-export interface Issue {
-  expand: string;
-  id: string;
-  self: string;
-  key: string;
-  fields: Fields;
-}
-
-export interface Fields {
-  statuscategorychangedate: string;
-  issuetype: Issuetype;
-  parent: Parent;
-  timespent: any;
-  sprint: any;
-  project: Project;
-  fixVersions: any[];
-  aggregatetimespent: any;
-  resolution: Resolution;
-  resolutiondate: string;
-  workratio: number;
-  watches: Watches;
-  issuerestriction: Issuerestriction;
-  lastViewed: string;
-  created: string;
-  epic: any;
-  priority: Priority2;
-  labels: string[];
-  timeestimate: any;
-  aggregatetimeoriginalestimate: any;
-  versions: any[];
-  issuelinks: any[];
-  assignee: any;
-  updated: string;
-  status: Status2;
-  components: any[];
-  timeoriginalestimate: any;
-  description: any;
-  timetracking: Timetracking;
-  security: any;
-  aggregatetimeestimate: any;
-  attachment: any[];
-  flagged: boolean;
-  summary: string;
-  creator: Creator;
-  subtasks: any[];
-  reporter: Reporter;
-  aggregateprogress: Aggregateprogress;
-  environment: any;
-  duedate: any;
-  closedSprints: ClosedSprint[];
-  progress: Progress;
-  comment: Comment;
-  votes: Votes;
-  worklog: Worklog;
-}
-
 export interface Issuetype {
   self: string;
   id: string;
@@ -75,18 +10,12 @@ export interface Issuetype {
   hierarchyLevel: number;
 }
 
-export interface Parent {
-  id: string;
-  key: string;
+export interface StatusCategory {
   self: string;
-  fields: Fields2;
-}
-
-export interface Fields2 {
-  summary: string;
-  status: Status;
-  priority: Priority;
-  issuetype: Issuetype2;
+  id: number;
+  key: string;
+  colorName: string;
+  name: string;
 }
 
 export interface Status {
@@ -96,14 +25,6 @@ export interface Status {
   name: string;
   id: string;
   statusCategory: StatusCategory;
-}
-
-export interface StatusCategory {
-  self: string;
-  id: number;
-  key: string;
-  colorName: string;
-  name: string;
 }
 
 export interface Priority {
@@ -125,6 +46,27 @@ export interface Issuetype2 {
   hierarchyLevel: number;
 }
 
+export interface Fields2 {
+  summary: string;
+  status: Status;
+  priority: Priority;
+  issuetype: Issuetype2;
+}
+
+export interface Parent {
+  id: string;
+  key: string;
+  self: string;
+  fields: Fields2;
+}
+
+export interface AvatarUrls {
+  '48x48': string;
+  '24x24': string;
+  '16x16': string;
+  '32x32': string;
+}
+
 export interface Project {
   self: string;
   id: string;
@@ -133,13 +75,6 @@ export interface Project {
   projectTypeKey: string;
   simplified: boolean;
   avatarUrls: AvatarUrls;
-}
-
-export interface AvatarUrls {
-  "48x48": string;
-  "24x24": string;
-  "16x16": string;
-  "32x32": string;
 }
 
 export interface Resolution {
@@ -155,12 +90,12 @@ export interface Watches {
   isWatching: boolean;
 }
 
+export interface Issuerestrictions {}
+
 export interface Issuerestriction {
   issuerestrictions: Issuerestrictions;
   shouldDisplay: boolean;
 }
-
-export interface Issuerestrictions {}
 
 export interface Priority2 {
   self: string;
@@ -174,6 +109,14 @@ export interface NonEditableReason {
   message: string;
 }
 
+export interface StatusCategory2 {
+  self: string;
+  id: number;
+  key: string;
+  colorName: string;
+  name: string;
+}
+
 export interface Status2 {
   self: string;
   description: string;
@@ -183,15 +126,14 @@ export interface Status2 {
   statusCategory: StatusCategory2;
 }
 
-export interface StatusCategory2 {
-  self: string;
-  id: number;
-  key: string;
-  colorName: string;
-  name: string;
-}
-
 export interface Timetracking {}
+
+export interface AvatarUrls2 {
+  '48x48': string;
+  '24x24': string;
+  '16x16': string;
+  '32x32': string;
+}
 
 export interface Creator {
   self: string;
@@ -204,11 +146,11 @@ export interface Creator {
   accountType: string;
 }
 
-export interface AvatarUrls2 {
-  "48x48": string;
-  "24x24": string;
-  "16x16": string;
-  "32x32": string;
+export interface AvatarUrls3 {
+  '48x48': string;
+  '24x24': string;
+  '16x16': string;
+  '32x32': string;
 }
 
 export interface Reporter {
@@ -220,13 +162,6 @@ export interface Reporter {
   active: boolean;
   timeZone: string;
   accountType: string;
-}
-
-export interface AvatarUrls3 {
-  "48x48": string;
-  "24x24": string;
-  "16x16": string;
-  "32x32": string;
 }
 
 export interface Aggregateprogress {
@@ -253,7 +188,7 @@ export interface Progress {
 }
 
 export interface Comment {
-  comments: any[];
+  comments: unknown[];
   self: string;
   maxResults: number;
   total: number;
@@ -270,11 +205,76 @@ export interface Worklog {
   startAt: number;
   maxResults: number;
   total: number;
-  worklogs: any[];
+  worklogs: unknown[];
 }
 
 export interface Names {
   [key: string]: string;
 }
 
-export default GetBoardIssuesForSprint
+export interface Fields {
+  statuscategorychangedate: string;
+  issuetype: Issuetype;
+  parent?: Parent;
+  timespent: unknown;
+  sprint: unknown;
+  project: Project;
+  fixVersions: unknown[];
+  aggregatetimespent: unknown;
+  resolution: Resolution;
+  resolutiondate: string;
+  workratio: number;
+  watches: Watches;
+  issuerestriction: Issuerestriction;
+  lastViewed: string;
+  created: string;
+  epic: unknown;
+  priority: Priority2;
+  labels: string[];
+  timeestimate: unknown;
+  aggregatetimeoriginalestimate: unknown;
+  versions: unknown[];
+  issuelinks: unknown[];
+  assignee: unknown;
+  updated: string;
+  status: Status2;
+  components: unknown[];
+  timeoriginalestimate: unknown;
+  description: unknown;
+  timetracking: Timetracking;
+  security: unknown;
+  aggregatetimeestimate: unknown;
+  attachment: unknown[];
+  flagged: boolean;
+  summary: string;
+  creator: Creator;
+  subtasks: unknown[];
+  reporter: Reporter;
+  aggregateprogress: Aggregateprogress;
+  environment: unknown;
+  duedate: unknown;
+  closedSprints: ClosedSprint[];
+  progress: Progress;
+  comment: Comment;
+  votes: Votes;
+  worklog: Worklog;
+}
+
+export interface Issue {
+  expand: string;
+  id: string;
+  self: string;
+  key: string;
+  fields: Fields;
+}
+
+interface GetBoardIssuesForSprint {
+  expand?: string;
+  startAt: number;
+  maxResults: number;
+  total: number;
+  issues: Issue[];
+  names?: Names;
+}
+
+export default GetBoardIssuesForSprint;

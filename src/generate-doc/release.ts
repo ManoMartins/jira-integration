@@ -1,23 +1,26 @@
-import { defaultProperties } from "../index";
-import { flatMap, groupBy } from "lodash";
-import { ExternalHyperlink, ISectionOptions, ISpacingProperties } from "docx";
+import {
+  flatMap, fromPairs, groupBy, sortBy, toPairs,
+} from 'lodash';
+import { ExternalHyperlink, ISectionOptions, ISpacingProperties } from 'docx';
 
-import { textRun, paragraph } from "../lib/docx";
+import GetAllSprint from 'services/jira/board/get-all-sprint.interface';
+import chalk from 'chalk';
+import { textRun, paragraph } from '../lib/docx';
 
-import GetAllSprint from "services/jira/board/get-all-sprint.interface";
+import { defaultProperties } from '../index';
 
 function generateIssueParagraph(
   key: string,
   summary: string,
   bulletLevel: number,
-  spacing?: ISpacingProperties
+  spacing?: ISpacingProperties,
 ): ReturnType<typeof paragraph> {
   return paragraph({
     spacing,
     children: [
       new ExternalHyperlink({
-        link: `https://manoel-martins.atlassian.net/browse/${key}`,
-        children: [textRun({ style: "Hyperlink", text: key, bold: true })],
+        link: `https://comunix-tech-team.atlassian.net/browse/${key}`,
+        children: [textRun({ style: 'Hyperlink', text: key, bold: true })],
       }),
       textRun({ text: ` - ${summary}` }),
     ],
@@ -25,33 +28,54 @@ function generateIssueParagraph(
   });
 }
 
-function releaseSection(
+function groupIssuesByModule(
   lastSprintsBySquad: {
-    sprint: GetAllSprint["values"][0];
+    sprint: GetAllSprint['values'][0];
     issues: {
       key: string;
-      module: any;
+      module: string;
       summary: string;
-      parent: {
+      parent?: {
         key: string;
         summary: string;
       };
     }[];
-  }[]
+  }[],
+) {
+  const issues = flatMap(lastSprintsBySquad.map((i) => i.issues));
+  console.log({ lastSprintsBySquad });
+
+  return groupBy(issues, 'module');
+}
+
+function releaseSection(
+  lastSprintsBySquad: {
+    sprint: GetAllSprint['values'][0];
+    issues: {
+      key: string;
+      module: string;
+      summary: string;
+      parent?: {
+        key: string;
+        summary: string;
+      };
+    }[];
+  }[],
 ): ISectionOptions {
+  console.log(chalk.blue('Creating release...'));
   return {
     properties: {
       ...defaultProperties,
     },
     children: [
       paragraph({
-        heading: "Heading1",
+        heading: 'Heading1',
         spacing: {
           after: 200,
         },
         children: [
           textRun({
-            text: "2 Liberação",
+            text: '2 Liberação',
             bold: true,
             size: 32,
           }),
@@ -59,22 +83,22 @@ function releaseSection(
       }),
       paragraph({
         indent: {
-          firstLine: `1.25cm`,
+          firstLine: '1.25cm',
         },
         children: [
           textRun({
-            text: "A liberação da versão 0.0.17.61 do Comunix para o ambiente do WEB traz a implementação dos seguintes itens: ",
+            text: 'A liberação da versão 0.0.17.61 do Comunix para o ambiente do WEB traz a implementação dos seguintes itens: ',
           }),
         ],
       }),
       ...flatMap(
-        Object.entries(groupBy(lastSprintsBySquad[0].issues, "module")).map(
+        Object.entries(groupIssuesByModule(lastSprintsBySquad)).map(
           ([key, issues]) => {
             const paragraphs = [];
 
             const title = paragraph({
               indent: {
-                firstLine: `1.25cm`,
+                firstLine: '1.25cm',
               },
               spacing: {
                 after: 200,
@@ -89,59 +113,80 @@ function releaseSection(
             });
             paragraphs.push(title);
 
-            Object.entries(groupBy(issues, "parent.key")).forEach(
-              ([parentKey, i]) => {
-                paragraphs.push(
-                  generateIssueParagraph(parentKey, i[0].parent.summary, 0, {
-                    before: 240,
-                    after: 120,
-                  })
-                );
+            const groupedIssues = groupBy(issues, 'parent.key');
+            const sortedGroupedIssues = sortBy(
+              toPairs(groupedIssues),
+              ([parentKey]) => {
+                // Se a chave for undefined, ela vem primeiro
+                if (parentKey === undefined) return -1;
+                // Caso contrário, ordena alfabeticamente
+                return parentKey;
+              },
+            );
 
-                i.forEach((issue) => {
+            Object.entries(fromPairs(sortedGroupedIssues)).forEach(
+              ([parentKey, i]) => {
+                if (parentKey && i[0].parent) {
                   paragraphs.push(
-                    generateIssueParagraph(issue.key, issue.summary, 1)
+                    generateIssueParagraph(parentKey, i[0].parent.summary, 0, {
+                      before: 240,
+                      after: 120,
+                    }),
+                  );
+                }
+                i.forEach((issue) => {
+                  const isUndefined = parentKey === 'undefined';
+                  paragraphs.push(
+                    generateIssueParagraph(
+                      issue.key,
+                      issue.summary,
+                      isUndefined ? 0 : 1,
+                      {
+                        before: isUndefined ? 240 : 120,
+                        after: isUndefined ? 120 : 60,
+                      },
+                    ),
                   );
                 });
-              }
+              },
             );
 
             return paragraphs;
-          }
-        )
+          },
+        ),
       ),
       paragraph({
-        alignment: "center",
+        alignment: 'center',
         spacing: {
           before: 240,
         },
         children: [
           textRun({
-            text: "A versão está disponível para homologação em: ",
+            text: 'A versão está disponível para homologação em: ',
           }),
           new ExternalHyperlink({
-            link: "https://homolog.comunix.com",
+            link: 'https://homolog.comunix.com',
             children: [
               textRun({
-                text: "https://homolog.comunix.com",
-                style: "Hyperlink",
+                text: 'https://homolog.comunix.com',
+                style: 'Hyperlink',
               }),
             ],
           }),
         ],
       }),
       paragraph({
-        alignment: "center",
+        alignment: 'center',
         children: [
           textRun({
-            text: "A versão está disponível para produção em: ",
+            text: 'A versão está disponível para produção em: ',
           }),
           new ExternalHyperlink({
-            link: "https://adm.comunix.com",
+            link: 'https://adm.comunix.com',
             children: [
               textRun({
-                text: "https://adm.comunix.com",
-                style: "Hyperlink",
+                text: 'https://adm.comunix.com',
+                style: 'Hyperlink',
               }),
             ],
           }),
