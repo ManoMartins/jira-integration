@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash_1 = require("lodash");
 const docx_1 = require("docx");
-const chalk_1 = require("chalk");
+const chalk = require("chalk");
 const docx_2 = require("../lib/docx");
 const index_1 = require("../index");
 function generateIssueParagraph(key, summary, bulletLevel, spacing) {
@@ -24,7 +24,7 @@ function groupIssuesByModule(lastSprintsBySquad) {
     return (0, lodash_1.groupBy)(issues, 'module');
 }
 function releaseSection(lastSprintsBySquad) {
-    console.log(chalk_1.default.blue('Creating release...'));
+    console.log(chalk.blue('Creating release...'));
     return {
         properties: Object.assign({}, index_1.defaultProperties),
         children: [

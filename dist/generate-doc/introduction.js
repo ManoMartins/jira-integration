@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = require("chalk");
+const chalk = require("chalk");
 const index_1 = require("../index");
 const docx_1 = require("../lib/docx");
 function introductionSection(lastSprintsBySquad) {
-    console.log(chalk_1.default.blue('Creating introduction...'));
+    console.log(chalk.blue('Creating introduction...'));
     return {
         properties: Object.assign({}, index_1.defaultProperties),
         children: [

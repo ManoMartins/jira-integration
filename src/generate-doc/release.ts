@@ -4,7 +4,8 @@ import {
 import { ExternalHyperlink, ISectionOptions, ISpacingProperties } from 'docx';
 
 import GetAllSprint from 'services/jira/board/get-all-sprint.interface';
-import chalk from 'chalk';
+import * as chalk from 'chalk';
+
 import { textRun, paragraph } from '../lib/docx';
 
 import { defaultProperties } from '../index';

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.defaultProperties = void 0;
-const chalk_1 = require("chalk");
+const chalk = require("chalk");
 const commander_1 = require("commander");
 const fs_1 = require("fs");
 const docx_1 = require("docx");
@@ -91,14 +91,14 @@ program
     .option('--token <name>', 'Greet the user with a custom name')
     .action(async () => {
     const sprintIds = [40, 41, 42, 45];
-    log(chalk_1.default.blue('Getting all sprints...'));
+    log(chalk.blue('Getting all sprints...'));
     const sprints = await Promise.all(sprintIds.map(async (sprintId) => (0, get_all_sprint_1.default)(sprintId)));
     const hasUndefined = sprints.some((item) => item === undefined);
     if (hasUndefined)
         return;
-    log(chalk_1.default.blue('Getting last sprints closed by squad...'));
+    log(chalk.blue('Getting last sprints closed by squad...'));
     const sprintsBySquad = await getSprints(sprints.filter((sprint) => !!sprint));
-    log(chalk_1.default.blue('Creating the Word document...'));
+    log(chalk.blue('Creating the Word document...'));
     const doc = new docx_1.Document({
         sections: [
             (0, cover_page_1.default)(),
@@ -112,7 +112,7 @@ program
         .then((buffer) => {
         // Write the buffer to a file
         (0, fs_1.writeFileSync)('example.docx', buffer);
-        log(chalk_1.default.blue('Word document created successfully.'));
+        log(chalk.blue('Word document created successfully.'));
     })
         .catch((error) => {
         console.log('Error occurred while creating the Word document:', error);

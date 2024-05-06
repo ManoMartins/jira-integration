@@ -1,4 +1,6 @@
-import { ISectionOptions, Paragraph, TableOfContents, TextRun } from "docx";
+import {
+  ISectionOptions, Paragraph, TableOfContents, TextRun,
+} from 'docx';
 
 function summarySection(): ISectionOptions {
   return {
@@ -10,16 +12,16 @@ function summarySection(): ISectionOptions {
         },
         children: [
           new TextRun({
-            text: "Sumário",
+            text: 'Sumário',
             bold: true,
             size: 32,
-            font: "Arial",
+            font: 'Arial',
           }),
         ],
       }),
-      new TableOfContents("Summary", {
+      new TableOfContents('Summary', {
         hyperlink: true,
-        headingStyleRange: "1-5",
+        headingStyleRange: '1-5',
       }),
     ],
   };

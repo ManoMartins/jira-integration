@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import { ISectionOptions } from 'docx';
 import { defaultProperties } from '../index';
 

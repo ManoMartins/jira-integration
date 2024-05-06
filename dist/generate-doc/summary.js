@@ -11,16 +11,16 @@ function summarySection() {
                 },
                 children: [
                     new docx_1.TextRun({
-                        text: "Sumário",
+                        text: 'Sumário',
                         bold: true,
                         size: 32,
-                        font: "Arial",
+                        font: 'Arial',
                     }),
                 ],
             }),
-            new docx_1.TableOfContents("Summary", {
+            new docx_1.TableOfContents('Summary', {
                 hyperlink: true,
-                headingStyleRange: "1-5",
+                headingStyleRange: '1-5',
             }),
         ],
     };
